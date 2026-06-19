@@ -14,16 +14,16 @@ Power BI was used to transform raw hospitality data into an interactive dashboar
 This dashboard analyzes seasonal trends in the hospitality industry including revenue, bookings, and occupancy rates across different regions and seasons.
 
 ### Overview Page
-![Overview Dashboard](overview.png)
+![Overview Dashboard](`dashboard overview.png`)
 
 ### Revenue Analysis
-![Revenue Analysis](revenue_analysis.png)
+![Revenue Analysis](Data_analysis.png)
 
 ### Booking Trends
-![Booking Trends](booking_trends.png)
+![Booking Trends](Seasonal_trends.png)
 
 ### Occupancy Analysis
-![Occupancy Rate](occupancy_rate.png)
+![Occupancy Rate](seasonal_hospitality.png)
 
 ---
 
