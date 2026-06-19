@@ -1,115 +1,145 @@
 # Credit Risk & Customer Lifetime Value (CLV) Analysis
-### Python · SQL · Power BI · RFM Segmentation · DAX
+**Python · SQL · Power BI · RFM Segmentation · Risk Modelling**
 
 ---
 
-## 📌 Project Overview
+## What this project is about
 
-An end-to-end analytics pipeline that evaluates **credit risk** and models **Customer Lifetime Value (CLV)** across 5,000+ customer records. The goal was to move beyond simple rule-based targeting and build a data-driven segmentation model that classifies customers by both their value and their risk — enabling smarter, more targeted outreach.
+I built this to answer a question that matters in financial services: *which customers are worth growing, and which ones are likely to default?*
 
-**Key result:** Engineered a composite risk score that enabled **30%+ more targeted outreach** than prior rule-based methods.
-
----
-
-## 🎯 Business Problem
-
-The business needed to answer two questions simultaneously:
-1. Which customers are most valuable (high CLV)?
-2. Which customers carry the highest risk of default or churn?
-
-A customer who is high-value AND high-risk needs a different strategy than one who is low-value AND low-risk. Treating them the same wastes budget and increases exposure.
+Most companies treat all customers the same until something goes wrong. This analysis classifies 5,000 customers into value-risk tiers before problems happen — so the business can act on the right customers, not just the loudest ones.
 
 ---
 
-## 🛠️ Tools & Technologies
+## Dataset
 
-| Tool | Purpose |
-|------|---------|
-| Python (Pandas, NumPy) | Data cleaning, RFM calculation, risk scoring |
-| Python (Matplotlib, Seaborn) | Visualisation and EDA |
-| SQL | Data extraction and aggregation from customer database |
-| Power BI + DAX | Interactive dashboard for stakeholder review |
+- **5,000 customer records** — synthetic dataset generated from real-world credit risk distributions
+- **Features:** age, annual income, credit score, employment type, loan amount, loan tenure, existing loans, transaction recency, frequency, monetary value, default history
+- **File:** `credit_risk_data.csv`
+
+> Dataset was generated using realistic statistical distributions (credit score mean ~680, income ~₹55K, default rate ~20% in low-risk segments) to mirror actual financial services data patterns.
 
 ---
 
-## 📊 Methodology
+## What I did — step by step
 
-### Step 1 — Data Extraction (SQL)
-Extracted customer transaction history, payment behaviour, and account data using SQL joins and aggregations across multiple tables.
+### 1. Exploratory Data Analysis
+- Checked for nulls, outliers, and distributional patterns across all features
+- Found credit score and debt-to-income ratio were the strongest default predictors
 
-### Step 2 — RFM Segmentation (Python)
-Calculated three scores per customer:
+### 2. RFM Segmentation
+Built a classic RFM model on customer transaction data:
 - **Recency** — how recently did they transact?
-- **Frequency** — how often do they transact?
-- **Monetary** — how much have they spent?
+- **Frequency** — how often?
+- **Monetary** — how much?
 
-Each customer received an RFM score from 1–5 on each dimension, combined into a composite value score.
+Each dimension scored 1–4, summed into an RFM score, then classified:
 
-### Step 3 — Credit Risk Scoring (Python)
-Built a composite risk score incorporating:
-- Payment delay patterns
-- Account delinquency flags
-- Transaction volatility
+| Segment | RFM Score | Count | % of Base |
+|---|---|---|---|
+| Champions | 10–12 | 779 | 15.6% |
+| Loyal | 8–9 | 1,690 | 33.8% |
+| At Risk | 6–7 | 1,805 | 36.1% |
+| Lost | 3–5 | 726 | 14.5% |
 
-### Step 4 — Value-Risk Tier Classification
-Combined RFM value score + risk score to classify all 5,000+ customers into **4 tiers**:
+### 3. Composite Risk Score
+Engineered a weighted composite score (0–100):
 
-| Tier | Description | Strategy |
-|------|-------------|----------|
-| High Value, Low Risk | Best customers | Retain and upsell |
-| High Value, High Risk | Profitable but risky | Monitor and limit exposure |
-| Low Value, Low Risk | Safe but small | Nurture with low-cost outreach |
-| Low Value, High Risk | Drain on resources | Deprioritise or exit |
+```python
+risk_score = (
+    (850 - credit_score) / 550 * 40   # 40% weight — credit history
+    + (loan_amount / annual_income) * 20  # 20% — debt-to-income ratio
+    + existing_loans * 10              # 10% — existing debt burden
+    + recency_days / 365 * 30         # 30% — transaction recency
+)
+```
 
-### Step 5 — Power BI Dashboard
-Built interactive dashboards with DAX measures for stakeholders to explore:
-- Segment distribution
-- Risk distribution by geography and product
-- CLV trends over time
-- KPI summary cards
+| Risk Tier | Score Range | Default Rate |
+|---|---|---|
+| Low Risk | 0–24 | 0.0% |
+| Medium Risk | 25–49 | 26.9% |
+| High Risk | 50–74 | 56.9% |
+| Critical Risk | 75–100 | 87.1% |
+
+### 4. CLV Estimation
+Estimated Customer Lifetime Value using a recency-adjusted formula:
+
+| Segment | Mean Estimated CLV |
+|---|---|
+| Champions | ₹48.7L |
+| Loyal | ₹17.3L |
+| At Risk | ₹6.7L |
+| Lost | ₹2.3L |
+
+**Key finding:** Champions (15.6% of customers) generate **21.4% of total monetary value** — confirming the Pareto principle and validating targeted outreach over mass campaigns.
 
 ---
 
-## 📁 Project Structure
+## Key Business Insights
+
+1. **779 Champion customers** drive disproportionate value — worth dedicated retention investment
+2. **1,805 At-Risk customers** with high CLV are slipping — a retention campaign targeting this group would recover estimated ₹12M+ in lifetime value
+3. **Critical Risk tier (3,944 customers)** has an 87.1% default rate — the composite score correctly flags these before default occurs
+4. **Targeting Champions + Loyal for upsell** vs. mass outreach reduces campaign cost per conversion by ~30% (estimated)
+
+---
+
+## Files in this folder
 
 ```
-Python-CreditRisk-CLV-Analysis/
-│
-├── data/
-│   └── customer_data_sample.csv       # Anonymised sample dataset
-│
-├── notebooks/
-│   └── credit_risk_clv_analysis.ipynb # Full Python analysis
-│
-├── sql/
-│   └── customer_extraction.sql        # Data extraction queries
-│
-├── dashboard/
-│   └── clv_risk_dashboard.pbix        # Power BI dashboard file
-│
+📁 credit-risk-clv/
+├── credit_risk_data.csv           # Raw dataset (5,000 customers)
+├── credit_risk_segmented.csv      # Output with RFM scores + risk tiers
+├── credit_risk_analysis.py        # Full Python analysis script
+├── chart1_rfm_segments.png        # RFM segment pie chart
+├── chart2_risk_distribution.png   # Risk score distribution by tier
+├── chart3_default_by_tier.png     # Default rate vs credit score scatter
+├── chart4_clv_by_segment.png      # CLV comparison by RFM segment
 └── README.md
 ```
 
 ---
 
-## 🔑 Key Findings
+## How to run this yourself
 
-- Top 20% of customers by CLV score accounted for **68% of total revenue**
-- High-risk customers represented **23% of the portfolio** but only **11% of revenue** — significant exposure for limited return
-- RFM segmentation enabled **30%+ improvement in outreach targeting** vs. prior flat-list approach
-- 4 distinct value-risk tiers identified, each requiring a different commercial strategy
+```bash
+# 1. Clone the repo
+git clone https://github.com/Log-ware/Data-Analytics-Portfolio.git
+
+# 2. Navigate to this project
+cd Data-Analytics-Portfolio/credit-risk-clv
+
+# 3. Install dependencies
+pip install pandas numpy matplotlib seaborn
+
+# 4. Run the analysis
+python credit_risk_analysis.py
+```
 
 ---
 
-## 📈 How to Run
+## Charts
 
-1. Clone this repository
-2. Open `notebooks/credit_risk_clv_analysis.ipynb` in Jupyter Notebook
-3. Install requirements: `pip install pandas numpy matplotlib seaborn`
-4. Run all cells sequentially
-5. Open `dashboard/clv_risk_dashboard.pbix` in Power BI Desktop for the interactive view
+### RFM Segment Distribution
+![RFM Segments](chart1_rfm_segments.png)
+
+### Risk Score Distribution
+![Risk Distribution](chart2_risk_distribution.png)
+
+### Default Rate by Risk Tier
+![Default by Tier](chart3_default_by_tier.png)
+
+### CLV by Segment
+![CLV by Segment](chart4_clv_by_segment.png)
 
 ---
 
-## 📫 Questions?
-**Logeshwaran A** · logesh17799@gmail.com · [LinkedIn](https://www.linkedin.com/in/logeshwaran-a-870078242)
+## Tools & Skills demonstrated
+
+`Python` `Pandas` `NumPy` `Matplotlib` `Seaborn` `RFM Analysis` `Feature Engineering` `Customer Segmentation` `Risk Scoring` `CLV Modelling` `Data Visualisation`
+
+---
+
+*Part of my [Data Analytics Portfolio](https://github.com/Log-ware/Data-Analytics-Portfolio)*
+*Connect on [LinkedIn](https://www.linkedin.com/in/logeshwaran-a-870078242)*
+
