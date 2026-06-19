@@ -11,6 +11,24 @@ Most companies treat all customers the same until something goes wrong. This ana
 
 ---
 
+# Project Architecture
+
+Raw Customer Data
+        ↓
+Data Cleaning
+        ↓
+Feature Engineering
+        ↓
+RFM Segmentation
+        ↓
+Risk Score Calculation
+        ↓
+CLV Estimation
+        ↓
+Customer Value-Risk Matrix
+        ↓
+Business Insights
+
 ## Dataset
 
 - **5,000 customer records** — synthetic dataset generated from real-world credit risk distributions
@@ -131,6 +149,20 @@ python credit_risk_analysis.py
 
 ### CLV by Segment
 ![CLV by Segment](Screenshots/chart4_clv_by_segment.png)
+
+---
+
+# Business Impact
+
+• Identified 779 Champion customers driving disproportionate revenue.
+
+• Segmented 5,000 customers into four actionable value tiers.
+
+• Built composite risk model achieving clear separation between low-risk and critical-risk customers.
+
+• Enabled targeted retention strategies for high-value at-risk customers.
+
+• Demonstrated customer segmentation, risk analytics, and CLV modelling in a single end-to-end workflow.
 
 ---
 
