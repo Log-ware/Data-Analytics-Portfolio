@@ -121,16 +121,16 @@ python credit_risk_analysis.py
 ## Charts
 
 ### RFM Segment Distribution
-![RFM Segments](chart1_rfm_segments.png)
+![RFM Segments](Screenshots/chart1_rfm_segments.png)
 
 ### Risk Score Distribution
-![Risk Distribution](chart2_risk_distribution.png)
+![Risk Distribution](Screenshots/chart2_risk_distribution.png)
 
 ### Default Rate by Risk Tier
-![Default by Tier](chart3_default_by_tier.png)
+![Default by Tier](Screenshots/chart3_default_by_tier.png)
 
 ### CLV by Segment
-![CLV by Segment](chart4_clv_by_segment.png)
+![CLV by Segment](Screenshots/chart4_clv_by_segment.png)
 
 ---
 
