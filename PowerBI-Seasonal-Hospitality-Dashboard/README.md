@@ -23,7 +23,7 @@ This dashboard analyzes seasonal trends in the hospitality industry including re
 ![Booking Trends](Seasonal_trends.png)
 
 ### Datewise Analysis
-![Datewise_analysis]()
+![Datewise_analysis](Datewise_analysis.png)
 
 ---
 
