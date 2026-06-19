@@ -22,9 +22,9 @@ warnings.filterwarnings('ignore')
 # ─────────────────────────────────────────────────────────────
 df = pd.read_csv('credit_risk_data.csv')
 
-print("=" * 55)
+
 print("STEP 1 — Data Overview")
-print("=" * 55)
+
 print(f"Shape          : {df.shape}")
 print(f"Null values    : {df.isnull().sum().sum()}")
 print(f"Default rate   : {df['default'].mean()*100:.1f}%")
@@ -35,9 +35,9 @@ print()
 # ─────────────────────────────────────────────────────────────
 # STEP 2 — RFM Segmentation
 # ─────────────────────────────────────────────────────────────
-print("=" * 55)
+
 print("STEP 2 — RFM Segmentation")
-print("=" * 55)
+
 
 rfm = df[['customer_id', 'recency_days', 'frequency', 'monetary']].copy()
 
@@ -62,9 +62,9 @@ print()
 # ─────────────────────────────────────────────────────────────
 # STEP 3 — Composite Risk Score
 # ─────────────────────────────────────────────────────────────
-print("=" * 55)
+
 print("STEP 3 — Composite Risk Score Engineering")
-print("=" * 55)
+
 
 # Weighted formula:
 #   40% → credit score (inverted — lower score = higher risk)
@@ -102,9 +102,9 @@ print()
 # ─────────────────────────────────────────────────────────────
 # STEP 4 — CLV Estimation
 # ─────────────────────────────────────────────────────────────
-print("=" * 55)
+
 print("STEP 4 — Customer Lifetime Value Estimation")
-print("=" * 55)
+
 
 # CLV proxy: monetary × frequency / recency weight
 df['estimated_clv'] = (
@@ -127,9 +127,9 @@ print()
 # ─────────────────────────────────────────────────────────────
 # STEP 5 — Key Business Insights
 # ─────────────────────────────────────────────────────────────
-print("=" * 55)
+
 print("STEP 5 — Key Business Insights")
-print("=" * 55)
+
 
 high_value_low_risk = df[
     (df['segment'].isin(['Champions', 'Loyal'])) &
