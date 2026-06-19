@@ -149,4 +149,4 @@ print(f"→ Priority retention targets — high value, slipping away")
 print()
 
 df.to_csv('credit_risk_segmented.csv', index=False)
-print("✅ Segmented dataset saved to credit_risk_segmented.csv")
+print("Segmented dataset saved to credit_risk_segmented.csv")
